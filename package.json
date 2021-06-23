@@ -1,0 +1,43 @@
+{
+  "name": "fastify-objection",
+  "version": "0.0.1",
+  "description": "Objection.js plugin for Fastify with PostgreSQL support",
+  "main": "plugin.js",
+  "type": "commonjs",
+  "scripts": {
+    "test:unit": "jest test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrsy/fastify-objection.git"
+  },
+  "keywords": [
+    "fastify",
+    "plugin",
+    "knex",
+    "objection",
+    "orm",
+    "postgresql"
+  ],
+  "author": "Maksym Herasymov <herasymov.maks@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hrsy/fastify-objection/issues"
+  },
+  "homepage": "https://github.com/hrsy/fastify-objection#readme",
+  "dependencies": {
+    "fastify-plugin": "^3.0.0",
+    "knex": "^0.21.19",
+    "objection": "^2.2.15",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "fastify": "^3.18.0",
+    "jest": "^27.0.5",
+    "prettier": "^2.3.1"
+  }
+}

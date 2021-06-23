@@ -1,0 +1,8 @@
+{
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "rules": {
+    "eol-last": ["error", "always"],
+    "no-plusplus": "off"
+  },
+  "ignorePatterns": ["test/"]
+}
