@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Objection.js plugin for Fastify with PostgreSQL support",
   "main": "plugin.js",
+  "types": "types.d.ts",
   "type": "commonjs",
   "scripts": {
     "test:unit": "jest test/"
