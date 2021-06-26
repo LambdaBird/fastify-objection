@@ -6,7 +6,7 @@
   "types": "types.d.ts",
   "type": "commonjs",
   "scripts": {
-    "test:unit": "jest test/"
+    "test": "tap test/plugin.test.js"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "fastify": "^3.18.0",
-    "jest": "^27.0.5",
-    "prettier": "^2.3.1"
+    "prettier": "^2.3.1",
+    "tap": "^15.0.9"
   }
 }

@@ -4,42 +4,40 @@ const objection = require('objection');
 
 const { ERR_MISSING_REQUIRED, ERR_INVALID_PROPERTY } = require('./errors');
 
-module.exports = fp(
-  (instance, options, next) => {
-    if (!options.connection || !options.models) {
-      next(new Error(ERR_MISSING_REQUIRED));
-    }
+const plugin = (instance, options, next) => {
+  if (!options.connection || !options.models) {
+    return next(new Error(ERR_MISSING_REQUIRED));
+  }
 
-    if (!Array.isArray(options.models) || !options.models.length) {
-      next(new Error(ERR_INVALID_PROPERTY));
-    }
+  if (!Array.isArray(options.models) || !options.models.length) {
+    return next(new Error(ERR_INVALID_PROPERTY));
+  }
 
-    const connection = knex({
-      client: 'pg',
-      connection: options.connection,
-      ...objection.knexSnakeCaseMappers(),
-    });
+  const connection = knex({
+    client: 'pg',
+    connection: options.connection,
+  });
 
-    const models = {};
+  const models = {};
 
-    objection.Model.knex(connection);
+  objection.Model.knex(connection);
 
-    options.models.forEach((model) => {
-      models[model.name] = model;
-    });
+  options.models.forEach((model) => {
+    models[model.name] = model;
+  });
 
-    instance.decorate('models', models);
-    instance.decorate('knex', connection);
+  instance.decorate('models', models);
+  instance.decorate('knex', connection);
 
-    instance.addHook('onClose', (_, done) => {
-      connection.destroy();
-      done();
-    });
+  instance.addHook('onClose', (_, done) => {
+    connection.destroy();
+    done();
+  });
 
-    next();
-  },
-  {
-    fastify: '>=2.0.0',
-    name: 'fastify-objection',
-  },
-);
+  return next();
+};
+
+module.exports = fp(plugin, {
+  fastify: '>=2.0.0',
+  name: 'fastify-objection',
+});

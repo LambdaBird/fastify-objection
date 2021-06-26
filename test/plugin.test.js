@@ -1,48 +1,67 @@
-const fastify = require('fastify')();
+const test = require('tap').test;
+const Fastify = require('fastify');
+const objection = require('objection');
 
 const plugin = require('../plugin');
 const { ERR_MISSING_REQUIRED, ERR_INVALID_PROPERTY } = require('../errors');
 
-describe('Plugin registration testing:', () => {
-  test('should throw an error if no connection string provided', () => {
-    fastify.register(plugin, {
-      models: [],
-    });
+test('Plugin registration', (t) => {
+  t.plan(4);
 
-    fastify.after((err) => {
-      expect(err).toEqual(new Error(ERR_MISSING_REQUIRED));
+  t.test('with missing "connection" and "models"', (t) => {
+    t.plan(1);
+
+    const fastify = Fastify();
+
+    fastify.register(plugin, {}).ready((error) => {
+      t.equal(error.message, ERR_MISSING_REQUIRED);
     });
   });
 
-  test('should throw an error if no models provided', () => {
-    fastify.register(plugin, {
-      connection: 'DB_CONNECTION',
-    });
+  t.test('with missing "models"', (t) => {
+    t.plan(1);
 
-    fastify.after((err) => {
-      expect(err).toEqual(new Error(ERR_MISSING_REQUIRED));
-    });
+    const fastify = Fastify();
+
+    fastify
+      .register(plugin, {
+        connection: 'connection_string',
+      })
+      .ready((error) => {
+        t.equal(error.message, ERR_MISSING_REQUIRED);
+      });
   });
 
-  test('should throw an error if models is not an array', () => {
-    fastify.register(plugin, {
-      connection: 'DB_CONNECTION',
-      models: 'model',
-    });
+  t.test('with "models" invalid type', (t) => {
+    t.plan(1);
 
-    fastify.after((err) => {
-      expect(err).toEqual(new Error(ERR_INVALID_PROPERTY));
-    });
+    const fastify = Fastify();
+
+    fastify
+      .register(plugin, {
+        connection: 'connection_string',
+        models: 'model',
+      })
+      .ready((error) => {
+        t.equal(error.message, ERR_INVALID_PROPERTY);
+      });
   });
 
-  test('should throw an error if models array is empty', () => {
-    fastify.register(plugin, {
-      connection: 'DB_CONNECTION',
-      models: [],
-    });
+  t.test('with right properties', (t) => {
+    t.plan(2);
 
-    fastify.after((err) => {
-      expect(err).toEqual(new Error(ERR_INVALID_PROPERTY));
-    });
+    const fastify = Fastify();
+
+    class User extends objection.Model {}
+
+    fastify
+      .register(plugin, {
+        connection: 'connection_string',
+        models: [User],
+      })
+      .ready(() => {
+        t.ok(fastify.knex);
+        t.ok(fastify.models);
+      });
   });
 });
