@@ -1,6 +1,6 @@
 {
   "name": "fastify-objection",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Objection.js plugin for Fastify with PostgreSQL support",
   "main": "plugin.js",
   "types": "types.d.ts",
